@@ -1,0 +1,16 @@
+#%RAML 1.0
+title: sys-ocr-api-specification
+
+types: 
+  Document: !include Project_Types/DocumentType.raml
+  
+/ocr:
+  post:
+    description: Send document to textract data
+    body:
+      application/json:
+        type: Document
+        example: !include Project_Types_Exemple/document.json
+    
+
+  

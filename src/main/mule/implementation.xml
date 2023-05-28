@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="PostDocumentToGetOCR" doc:id="6301cde8-d85a-4285-9c7f-8055e97972fb" >
+		<set-variable value="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;import generateSecureAWSHeaders from dwCanonicalMakerFunction::Auth&#10;---&#10;generateSecureAWSHeaders(&#10;	'POST', &#10;	'us-east-2', &#10;	'textract',&#10;	'Textract.DetectDocumentText', &#10;	'/', &#10;	'', &#10;	payload, &#10;	'AKIAUWNDIVUDDLY6MI6S', &#10;	'SJZQXM68tTcBroA4G1U2dUYKA6htQi9kBbXfFxUw'&#10;	)]" doc:name="Set headers" doc:id="9b68a7ac-74ac-4eb1-9d24-9fc7292a2e2c" variableName="headers"/>
+		<http:request method="POST" doc:name="Request to aws service API" doc:id="efee376d-4ced-406f-a0b5-0771d632ff17" url='#["https://" ++ vars.headers.host]'>
+			<http:headers ><![CDATA[#[vars.headers]]]></http:headers>
+		</http:request>
+	</flow>
+</mule>
