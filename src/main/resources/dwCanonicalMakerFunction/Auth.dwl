@@ -1,6 +1,6 @@
 %dw 2.0
 
-import keySet from dw::core::Objects
+
 import HMACBinary, hashWith from dw::Crypto
 import toHex from dw::core::Binaries
 
@@ -77,7 +77,7 @@ fun stringToSign(date, dateStamp, region: String, service: String, canonicalRequ
  * kSigning = HMAC(kService, "aws4_request")
  */
 fun getSignatureKey(key, date, region, service) =
-	sign(sign(sign(sign('AWS4$(key)', date),region),service),"aws4_request")
+	sign(sign(sign(sign('AWS4$(key)'as Binary, date as Binary),region as Binary),service as Binary),"aws4_request"as Binary)
 
 
 /*
@@ -104,7 +104,7 @@ fun computeAuthorizationHeader(amz_date: String, date_stamp: String, region: Str
  * The canonical headers consist of a list of all the HTTP headers that you are including with the signed request.
  */
 fun canoncialHeader(headers: Object) =
-	keySet(headers)
+	keysOf(headers)
 		orderBy (trim(lower($)))
 		map "$(trim(lower($))):$(headers[$])"
 		joinBy "\n"
@@ -117,7 +117,7 @@ fun sign(key: Binary, msg: Binary): Binary =
 	HMACBinary(key, msg, "HmacSHA256")
 
 fun headerKeys(headers: Object) =
-	keySet(headers) map (trim(lower($))) orderBy $ joinBy ";"
+	keysOf(headers) map (trim(lower($))) orderBy $ joinBy ";"
 
 
 /*

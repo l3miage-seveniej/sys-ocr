@@ -11,14 +11,6 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
 		<http:request method="POST" doc:name="Request to aws service API" doc:id="efee376d-4ced-406f-a0b5-0771d632ff17" url='#["https://" ++ vars.headers.host]'>
 			<http:headers ><![CDATA[#[vars.headers]]]></http:headers>
 		</http:request>
-		<ee:transform doc:name="canonical payload to JSON" doc:id="04ab3195-a33b-4506-8660-2f59f115af97" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
-output application/json
----
-read(payload,"application/json")]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
 		<ee:transform doc:name="payload to confor JSON" doc:id="efa4419f-0dce-4ef5-ab6c-78a14ce4d2d8">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
@@ -26,7 +18,7 @@ output application/json
 
 import * from dw::core::Arrays
 
-var allBlocks = payload.Blocks
+var allBlocks = read(payload,"application/json").Blocks
 
 fun searchChildren(childIds) = (allBlocks filter (childIds contains $.Id))
 fun searchLastChildren(childIds) =  if(isEmpty(getRelationships(searchChildren(childIds))))
@@ -48,14 +40,6 @@ fun getTableValues(tableBlock) = (tableBlock filter $.EntityTypes == null) map {
     value: searchChildren(getRelationshipsType($, "CHILD"))..Text joinBy " "
 }
 
-fun associateValues(headers, values) = (values filter $.value != null) map ((item, index) -> {
-        ((headers filter $.positionX == item.positionX)[0].value):item.value,
-        positionY: item.positionY,
-        positionX: item.positionX
-    }) groupBy $.positionY 
-    mapObject ((value, key, index) -> { (key):(value reduce ((item, acc={}) -> item - "positionY" - "positionX" ++ acc))})
-    pluck($)
- 
  
 var valuesTables = getTableValues(searchChildren(getRelationshipsType(searchBlockType("TABLE"),"CHILD")))
 
