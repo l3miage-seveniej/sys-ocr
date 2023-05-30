@@ -11,7 +11,18 @@ properties:
       Bytes:
         type: string
         required: true
-      
+  FeatureTypes:
+    type: array
+    required: true
+    items: 
+      type: string 
+      enum:
+        - TABLES
+        - FORMS 
+        - QUERIES 
+        - SIGNATURES
+
+  
   
   
   

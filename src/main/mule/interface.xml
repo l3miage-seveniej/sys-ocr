@@ -121,6 +121,6 @@ output application/json
         </error-handler>
     </flow>
     <flow name="post:\ocr:application\json:sys-ocr-api-specification-config">
-		<flow-ref doc:name="PostDocumentToGetOCR" doc:id="c4daf4c8-e23c-449d-8af1-def044197142" name="PostDocumentToGetOCR"/>
+		<flow-ref doc:name="PostDocumentToGetOCR" doc:id="1ca2659c-5bc5-483b-908c-3134acbefb9c" name="PostDocumentToGetOCR"/>
     </flow>
 </mule>
