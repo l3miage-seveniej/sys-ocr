@@ -45,7 +45,7 @@ var valuesTables = getTableValues(searchChildren(getRelationshipsType(searchBloc
 
 var articles =  (valuesTables groupBy $.positionY pluck $) map {
     article_id: ($ filter $.positionX == 1).value[0],
-    number: ($ filter $.positionX == 2).value[0]
+    number: (($ filter $.positionX == 2).value[0]) as Number
 }
  
  var keyValues = getEntityTypes("KEY") map ((item,index)->{
